@@ -1,0 +1,1 @@
+Create appsettings.json in order to Config JWT Issuer, Audience and Key Properties
