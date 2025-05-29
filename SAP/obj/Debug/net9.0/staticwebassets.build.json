@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "xSjF1fUiFTxegjCrDYUHdQsJxO8E9vWYJkIIbUkGHMs=",
+  "Source": "SAP",
+  "BasePath": "_content/SAP",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
