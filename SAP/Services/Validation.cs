@@ -1,7 +1,9 @@
+using System.Text;
+
 namespace SecAuthProj
 {
-    public class ValidationHelper {
-
+    public class ValidationHelper
+    {
         private static readonly HashSet<char> ValidUsernameChars = ['_', '.', '-', '/', '\\', '"', '\'', ' ', '='];
         private static readonly HashSet<char> ValidPasswordChars = ['!', '@', '#', '$', '%', '^', '&', '*', '+', '_'];
 
@@ -10,6 +12,8 @@ namespace SecAuthProj
             if (string.IsNullOrEmpty(username)) {
                 return false;
             }
+
+            username = DecodeInput(username);
 
             if (XSSCheck(username)) {
                 return false; // Reject if XSS patterns are found
@@ -32,6 +36,8 @@ namespace SecAuthProj
                 return false;
             }
 
+            email = DecodeInput(email);
+
             if (XSSCheck(email)) {
                 return false; // Reject if XSS patterns are found
             }
@@ -46,6 +52,8 @@ namespace SecAuthProj
             if (string.IsNullOrEmpty(password)) {
                 return false;
             }
+
+            password = DecodeInput(password);
 
             if (XSSCheck(password)) {
                 return false; // Reject if XSS patterns are found
@@ -65,7 +73,7 @@ namespace SecAuthProj
         public static bool XSSCheck(string input) {
 
             // Simple XSS check: look for common XSS patterns
-            string[] xssPatterns = { "<script", "<iframe" };
+            string[] xssPatterns = { "<script", "<iframe", "<object", "<embed", "<form", "<input", "<img", "javascript:", "onerror=", "onload=", "alert(", "confirm(", "prompt(" };
             foreach (var pattern in xssPatterns) {
                 if (input.Contains(pattern, StringComparison.OrdinalIgnoreCase)) {
                     return true;
@@ -73,6 +81,16 @@ namespace SecAuthProj
             }
 
             return false;
+        }
+
+        public static string DecodeInput(string input) {
+
+            string decoded_input = System.Net.WebUtility.HtmlDecode(input);
+            decoded_input = Uri.UnescapeDataString(decoded_input);
+            decoded_input = decoded_input.Normalize(NormalizationForm.FormC);
+            decoded_input = decoded_input.Trim();
+
+            return decoded_input;
         }
     }
 }
